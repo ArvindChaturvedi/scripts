@@ -13,18 +13,6 @@ echo "$pods" | jq -r '
   .items[] | 
   .metadata as $metadata | 
   .spec.containers[] | 
-  select(
-    (.env[]? | select(.name == "LOG_LEVEL" and .value == "DEBUG")) or
-    (.envFrom[]?.configMapRef.name as $configMapRef | 
-     $metadata.namespace as $namespace | 
-     $configMapRef | 
-     if . != null then 
-       (input | select(.metadata.name == $configMapRef and .metadata.namespace == $namespace) | 
-        .data.LOG_LEVEL == "DEBUG") 
-     else 
-       false 
-     end
-    )
-  ) | 
+  select(.env[]? | select(.name == "LOG_LEVEL" and .value == "DEBUG")) | 
   "Namespace: " + $metadata.namespace + ", Pod: " + $metadata.name + ", Container: " + .name
-' --slurpfile pods <(kubectl get configmaps $NAMESPACE -o json)
+'
