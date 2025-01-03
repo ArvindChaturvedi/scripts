@@ -1,0 +1,33 @@
+name: Update number.txt every 5 minutes
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+jobs:
+  update-number:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+
+    - name: Run Python script
+      run: python update_number.py
+
+    - name: Push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/ArvindChaturvedi/scripts.git
+        git fetch origin
+        git rebase origin/HEAD
+        git push origin HEAD
