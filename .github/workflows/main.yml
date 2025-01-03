@@ -2,8 +2,7 @@ name: Update number.txt every 5 minutes
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # Every 5 minutes
-
+    - cron: "*/5 * * * *"
 jobs:
   update-number:
     runs-on: ubuntu-latest
