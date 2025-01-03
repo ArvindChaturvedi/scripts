@@ -1,42 +1,37 @@
-name: Update Number
+name: Update number.txt every 5 minutes
 
-# Run the workflow every 5 minutes
 on:
   schedule:
     - cron: "*/5 * * * *"  # Every 5 minutes
-  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   update-number:
     runs-on: ubuntu-latest
-    
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Set up Python
-    - name: Set up Python
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'  # Use the required Python version
+        python-version: "3.12"
 
-    # Step 3: Install dependencies (if any)
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
+      run: pip install -r requirements.txt
 
-    # Step 4: Run the Python script
-    - name: Run update script
-      run: |
-        python update_number.py
+    - name: Run Python script
+      run: python update_number.py
 
-    # Step 5: Push changes back to the repository
     - name: Push changes
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/ArvindChaturvedi/scripts.git
+        git fetch origin
+        git rebase origin/HEAD
         git push origin HEAD
