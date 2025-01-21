@@ -28,11 +28,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
-        git config --global user.name "ArvindChaturvedi"
-        git config --global user.email "Arvind.Chaturvedi1092@gmail.com"
         git remote set-url origin https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/ArvindChaturvedi/scripts.git
         git fetch origin
         git rebase origin/main  # Pull latest changes
-        git add_number.txt
-        git commit -m "Update Number"
         git push origin main
