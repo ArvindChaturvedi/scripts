@@ -1,4 +1,4 @@
-name: Update number.txt every 5 minutes
+name: Update number.txt every 59 minutes
 
 on:
   schedule:
