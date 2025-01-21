@@ -13,8 +13,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "ArvindChaturvedi"
+        git config --global user.email "Arvind.Chaturvedi1092@gmail.com"
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -26,9 +26,13 @@ jobs:
 
     - name: Push changes
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
-        git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/ArvindChaturvedi/scripts.git
+        git config --global user.name "ArvindChaturvedi"
+        git config --global user.email "Arvind.Chaturvedi1092@gmail.com"
+        git remote set-url origin https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/ArvindChaturvedi/scripts.git
         git fetch origin
         git rebase origin/main  # Pull latest changes
-        git push origin HEAD
+        git add_number.txt
+        git commit -m "Update Number"
+        git push origin main
